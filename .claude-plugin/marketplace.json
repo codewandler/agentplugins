@@ -1,0 +1,20 @@
+{
+  "name": "agentplugins",
+  "owner": {
+    "name": "codewandler",
+    "url": "https://github.com/codewandler"
+  },
+  "description": "Reusable Claude Code plugins from codewandler.",
+  "version": "0.2.0",
+  "plugins": [
+    {
+      "name": "track",
+      "source": "./plugins/track",
+      "description": "Spec-driven backlog: vision -> roadmap -> stories -> designs as in-repo markdown, with a deterministic status board generated from story frontmatter. Slash commands for the full story lifecycle and a self-orienting skill so any agent picks up the next ready story.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "category": "project-management",
+      "keywords": ["planning", "backlog", "stories", "roadmap", "epics", "tracking", "board"]
+    }
+  ]
+}

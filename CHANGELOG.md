@@ -2,6 +2,36 @@
 
 All notable changes to codewandler/agentplugins are documented in this file.
 
+## [0.2.0] - 2026-06-30
+
+### Added
+
+#### Marketplace
+
+- **`.claude-plugin/marketplace.json`** — the repo is now an installable Claude Code marketplace
+  (`agentplugins`). Add it with `/plugin marketplace add codewandler/agentplugins`.
+
+#### Track Plugin
+
+- **`track`** — a spec-driven backlog plugin: a four-layer in-repo framework (vision → roadmap →
+  stories → designs) with a status board generated deterministically from story frontmatter. Modeled
+  on the tracking system used by the `flux` project.
+  - **Commands**: `init`, `story`, `epic`, `board`, `next`, `done`, `design` (namespaced `/track:*`).
+  - **Skill**: `tracking` — self-orientation + conventions (four-layer model, frontmatter schema,
+    status lifecycle, board rules), with progressive-disclosure references.
+  - **Agent**: `story-implementer` — implements a single story end-to-end (failing-first test → gate →
+    status), without committing.
+  - **Board generator**: `scripts/gen_board.py` (Python 3, stdlib-only, deterministic, idempotent)
+    plus `scripts/BOARD_SPEC.md` for an exact agent-driven fallback when Python is unavailable.
+  - **Templates**: story, board, roadmap, vision, design, and an `AGENTS.md` "Start here" snippet.
+- Validated with `claude plugin validate --strict` (plugin + marketplace) and exercised end-to-end
+  against the `flux` repo's real story corpus.
+
+### Notes
+
+- The existing `coder` content is left untouched and is not yet registered in the marketplace (it
+  uses a pre–Claude-Code format and has no `plugin.json`).
+
 ## [0.1.0] - 2025-04-16
 
 ### Added
@@ -48,4 +78,5 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ---
 
+[0.2.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.2.0
 [0.1.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.1.0
