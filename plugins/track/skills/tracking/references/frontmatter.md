@@ -14,7 +14,8 @@ are views derived from it.
 | `status` | yes | enum | One of `backlog`, `ready`, `in-progress`, `blocked`, `done`. Drives which board section the story lands in. |
 | `priority` | when `ready` | integer | Rank among `ready` stories — **lower = higher priority** (1 is the top pick). Omit for non-ready stories. Ties break on `id`. |
 | `design` | no | path | Repo-relative path to a design doc, e.g. `docs/designs/endpoint-discovery.md`. |
-| `epic` | no | slug | Groups the story under an epic on the board and roadmap. The slug should match a design doc basename in `docs/designs/<epic>.md` so the epic title can be resolved from that doc's H1. |
+| `epic` | no | slug | Groups the story under an epic on the board and roadmap. The slug should match a design doc basename in `docs/designs/<epic>.md` so the epic title and blurb can be resolved from that doc. |
+| `note` | no | string | A short annotation rendered after the title on the board (e.g. `**top pick** · unblocks the assistant flow`). Keep it to one line; markdown is allowed. This is how board rows stay context-rich without hand-editing the board. |
 
 ## ID / prefix scheme
 

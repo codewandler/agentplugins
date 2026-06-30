@@ -2,6 +2,26 @@
 
 All notable changes to codewandler/agentplugins are documented in this file.
 
+## [0.3.0] - 2026-06-30
+
+### Changed
+
+#### Track Plugin (0.2.0) — board richness
+
+The generated board is now a strict superset of a hand-curated one:
+
+- **Per-row annotations**: new optional `note:` story frontmatter field, rendered after the title on
+  the board (`· <note>`). Richness lives in the source of truth, not in stale hand-edited prose.
+- **Epic blurbs**: each `### <epic>` group now shows a one-line blurb pulled from the first line under
+  the epic design doc's `## Why`.
+- **Done list**: the Done section now lists done stories (id — title · note) plus a CHANGELOG pointer,
+  instead of just a count.
+- **Docs map**: `/track:init` now scaffolds a `docs/README.md` navigation map and a `docs/archive/`
+  directory for superseded material.
+
+`scripts/gen_board.py`, `scripts/BOARD_SPEC.md`, the templates, the `tracking` skill, and the
+references were updated together; re-validated with `claude plugin validate --strict`.
+
 ## [0.2.0] - 2026-06-30
 
 ### Added
@@ -78,5 +98,6 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ---
 
+[0.3.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.3.0
 [0.2.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.2.0
 [0.1.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.1.0

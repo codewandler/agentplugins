@@ -15,14 +15,15 @@ real plugin path when the command runs). If for any reason it didn't resolve, lo
 
 ## Steps
 
-1. **Survey.** Let `DOCS` = `$1` or `docs`. Check what already exists: `DOCS/vision.md`,
-   `DOCS/roadmap.md`, `DOCS/stories/`, `DOCS/stories/README.md`, `DOCS/stories/_TEMPLATE.md`,
-   `DOCS/designs/`, `CHANGELOG.md`, `AGENTS.md`. Report the survey.
+1. **Survey.** Let `DOCS` = `$1` or `docs`. Check what already exists: `DOCS/README.md`,
+   `DOCS/vision.md`, `DOCS/roadmap.md`, `DOCS/stories/`, `DOCS/stories/README.md`,
+   `DOCS/stories/_TEMPLATE.md`, `DOCS/designs/`, `DOCS/archive/`, `CHANGELOG.md`, `AGENTS.md`. Report
+   the survey.
 
 2. **Confirm scope.** The **stories board** is always scaffolded. Ask the user which optional layers to
-   add, defaulting to **everything not already present**: `vision.md`, `roadmap.md`, `designs/`,
-   `CHANGELOG.md`, and the `AGENTS.md` "Start here" wiring. Skip anything that already exists (never
-   overwrite); if a target exists, leave it untouched and note it.
+   add, defaulting to **everything not already present**: the `DOCS/README.md` docs map, `vision.md`,
+   `roadmap.md`, `designs/`, `archive/`, `CHANGELOG.md`, and the `AGENTS.md` "Start here" wiring. Skip
+   anything that already exists (never overwrite); if a target exists, leave it untouched and note it.
 
 3. **Create the stories layer.**
    - `DOCS/stories/_TEMPLATE.md` ← `templates/story.md`.
@@ -31,9 +32,11 @@ real plugin path when the command runs). If for any reason it didn't resolve, lo
 
 4. **Create the optional layers** the user chose, substituting `{{PROJECT}}` (and leaving the
    `{{EXAMPLE_EPIC_*}}` placeholders for the user to fill or delete):
+   - `DOCS/README.md` ← `templates/docs-readme.md` (the docs map).
    - `DOCS/vision.md` ← `templates/vision.md`
    - `DOCS/roadmap.md` ← `templates/roadmap.md`
    - `DOCS/designs/` ← create the directory (add a `.gitkeep` if empty).
+   - `DOCS/archive/` ← create the directory (add a `.gitkeep` if empty) for superseded designs/notes.
    - `CHANGELOG.md` ← a minimal Keep-a-Changelog header if absent.
 
 5. **Wire AGENTS.md.** If the user opted in: append the contents of `templates/agents-snippet.md` to

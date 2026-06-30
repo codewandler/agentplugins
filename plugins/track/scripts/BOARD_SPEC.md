@@ -30,16 +30,15 @@ for any duplicate `id`, for a `ready` story with no `priority`, and for a `prior
 
 ## 2. Bucket by status
 
-- `done` stories are **counted only** (not listed). Let `D` = the count.
-- The rest go into: **Now** (`in-progress`), **Next** (`ready`), **Blocked** (`blocked`),
-  **Backlog** (`backlog`).
+Bucket every story by its normalized status: **Now** (`in-progress`), **Next** (`ready`), **Blocked**
+(`blocked`), **Backlog** (`backlog`), **Done** (`done`).
 
 ## 3. Sort
 
 - **Natural id order** = sort by `(uppercased-prefix, number, raw-id)` where prefix/number come from
   the leading `^([A-Za-z]+)[-_ ]?(\d+)` of the id (e.g. `D-2` before `D-10`); ids that don't match
   sort last under prefix `~`.
-- **Now / Blocked / Backlog**: natural id order.
+- **Now / Blocked / Backlog / Done**: natural id order.
 - **Next**: by `(priority ascending, natural id)`. Stories with no integer priority sort after those
   with one.
 
@@ -47,20 +46,27 @@ for any duplicate `id`, for a `ready` story with no `priority`, and for a `prior
 
 Within Next and Backlog: list stories **without** an `epic` first, in the order from step 3. Then, for
 each distinct `epic` slug in **ascending slug order**, emit a blank line, a `### <Epic title>`
-subheader, and that epic's stories (in the same sorted order). **Epic title** = the H1 (`# …`) of
-`<docs-dir>/designs/<slug>.md` with a leading `Design:` / `Design —` / `Design -` stripped
-(case-insensitive); if that file or H1 is absent, title-case the slug (replace `-`/`_` with spaces).
+subheader, an optional **blurb line**, and that epic's stories (in the same sorted order). Done is a
+flat list (not epic-grouped).
+
+- **Epic title** = the H1 (`# …`) of `<docs-dir>/designs/<slug>.md` with a leading `Design:` /
+  `Design —` / `Design -` stripped (case-insensitive); if that file or H1 is absent, title-case the
+  slug (replace `-`/`_` with spaces).
+- **Blurb** = the first non-empty, non-heading line under the design doc's `## Why` heading,
+  truncated to 200 chars on a word boundary (append `…`). Render it on its own line as `_<blurb>_`.
+  Omit the blurb line entirely if there's no design doc or no `## Why` content.
 
 ## 5. Render
 
-Each story row:
+Each story row, joining the present parts with ` · ` (U+00B7); the em dash in the link is ` — `
+(U+2014):
 
 ```
-- [<id> — <title>](<filename>) · <pillar>
+- [<id> — <title>](<filename>) · <pillar> · <note>
 ```
 
-Omit ` · <pillar>` when the story has no `pillar`. The em dash (` — `, U+2014) and the middot
-(` · `, U+00B7) are literal.
+Omit `<pillar>` and/or `<note>` when that frontmatter field is absent (so a story with neither renders
+just `- [<id> — <title>](<filename>)`).
 
 Build the block (note the exact headings and the blank line between sections):
 
@@ -80,8 +86,11 @@ Build the block (note the exact headings and the blank line between sections):
 <grouped rows, or "_None._" if empty>
 
 ## Done
-<"_{D} done — rolled into [CHANGELOG.md](../../CHANGELOG.md)._", or "_None yet._" if D == 0>
+<done rows in natural id order, or "_None yet._" if empty>
 ```
+
+If there is at least one done story, append — after a blank line following the done rows — the line
+`_See [CHANGELOG.md](../../CHANGELOG.md) for the full released history._`
 
 ## 6. Splice
 

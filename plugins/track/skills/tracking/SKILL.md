@@ -64,6 +64,7 @@ status: ready         # backlog | ready | in-progress | blocked | done
 priority: 1           # integer rank among `ready` stories (lower = higher); omit otherwise
 design:               # optional path: docs/designs/<slug>.md
 epic:                 # optional epic slug; groups this story on the board + roadmap
+note:                 # optional one-line annotation rendered after the title on the board
 ---
 ```
 

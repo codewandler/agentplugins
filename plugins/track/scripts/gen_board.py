@@ -80,25 +80,58 @@ def natural_id_key(story_id):
     return ("~", 0, story_id or "")
 
 
-def epic_title(docs_dir, slug):
-    """Resolve an epic's display title from its design doc H1, else title-case the slug."""
+def _design_lines(docs_dir, slug):
     path = os.path.join(docs_dir, "designs", slug + ".md")
     if os.path.isfile(path):
         with open(path, encoding="utf-8") as fh:
-            for line in fh:
-                line = line.strip()
-                if line.startswith("# "):
-                    title = line[2:].strip()
-                    title = re.sub(r"^design\s*[:—-]\s*", "", title, flags=re.I)
-                    return title.strip()
+            return fh.read().splitlines()
+    return None
+
+
+def epic_title(docs_dir, slug):
+    """Resolve an epic's display title from its design doc H1, else title-case the slug."""
+    lines = _design_lines(docs_dir, slug)
+    if lines:
+        for line in lines:
+            line = line.strip()
+            if line.startswith("# "):
+                title = re.sub(r"^design\s*[:—-]\s*", "", line[2:].strip(), flags=re.I)
+                return title.strip()
     return slug.replace("-", " ").replace("_", " ").title()
 
 
+def epic_blurb(docs_dir, slug, limit=200):
+    """One-line epic summary: the first non-empty line under the design doc's `## Why`.
+
+    Returns "" if there's no design doc or no Why section. Truncated to `limit`
+    chars on a word boundary so the board stays scannable.
+    """
+    lines = _design_lines(docs_dir, slug)
+    if not lines:
+        return ""
+    in_why = False
+    for line in lines:
+        if re.match(r"^##\s+why\b", line.strip(), flags=re.I):
+            in_why = True
+            continue
+        if in_why:
+            if line.strip().startswith("#"):
+                break
+            if line.strip():
+                blurb = line.strip()
+                if len(blurb) > limit:
+                    blurb = blurb[:limit].rsplit(" ", 1)[0] + "…"
+                return blurb
+    return ""
+
+
 def row(story):
-    link = "[{id} — {title}]({file})".format(**story)
+    parts = ["- [{id} — {title}]({file})".format(**story)]
     if story.get("pillar"):
-        return "- {} · {}".format(link, story["pillar"])
-    return "- {}".format(link)
+        parts.append(story["pillar"])
+    if story.get("note"):
+        parts.append(story["note"])
+    return " · ".join(parts)
 
 
 def render_grouped(stories, docs_dir):
@@ -114,6 +147,9 @@ def render_grouped(stories, docs_dir):
     for slug in sorted(grouped):
         out.append("")
         out.append("### {}".format(epic_title(docs_dir, slug)))
+        blurb = epic_blurb(docs_dir, slug)
+        if blurb:
+            out.append("_{}_".format(blurb))
         out.extend(row(s) for s in grouped[slug])
     return out
 
@@ -123,7 +159,7 @@ def section(heading, lines):
     return "## {}\n{}".format(heading, body)
 
 
-def build_block(stories, done_count, docs_dir):
+def build_block(stories, docs_dir):
     by_status = {s: [] for s in KNOWN_STATUSES}
     for s in stories:
         by_status.get(s["status"], []).append(s)
@@ -135,6 +171,12 @@ def build_block(stories, done_count, docs_dir):
     )
     blocked = sorted(by_status["blocked"], key=lambda s: natural_id_key(s["id"]))
     backlog = sorted(by_status["backlog"], key=lambda s: natural_id_key(s["id"]))
+    done = sorted(by_status["done"], key=lambda s: natural_id_key(s["id"]))
+
+    done_body = "\n".join(row(s) for s in done) if done else "_None yet._"
+    done_section = "## Done\n{}".format(done_body)
+    if done:
+        done_section += "\n\n_See [CHANGELOG.md](../../CHANGELOG.md) for the full released history._"
 
     parts = [
         GENERATED_NOTE,
@@ -148,9 +190,7 @@ def build_block(stories, done_count, docs_dir):
         "",
         section("Backlog", render_grouped(backlog, docs_dir)),
         "",
-        "## Done",
-        "_{} done — rolled into [CHANGELOG.md](../../CHANGELOG.md)._".format(done_count)
-        if done_count else "_None yet._",
+        done_section,
     ]
     return "\n".join(parts)
 
@@ -171,7 +211,6 @@ def main(argv):
     warnings = []
     stories = []
     seen_ids = {}
-    done_count = 0
 
     for name in sorted(os.listdir(stories_dir)):
         if name in SKIP_FILES or not name.endswith(".md"):
@@ -194,12 +233,9 @@ def main(argv):
             warnings.append("duplicate id '{}' in {} and {}".format(sid, seen_ids[sid], name))
         seen_ids[sid] = name
 
-        if status == "done":
-            done_count += 1
-            continue
-
         story = {"id": sid, "title": title, "status": status, "file": name,
-                 "pillar": fm.get("pillar"), "epic": fm.get("epic")}
+                 "pillar": fm.get("pillar"), "epic": fm.get("epic"),
+                 "note": fm.get("note")}
         prio = fm.get("priority")
         if prio not in (None, ""):
             parsed = parse_priority(prio)
@@ -211,7 +247,7 @@ def main(argv):
             warnings.append("{}: status 'ready' but no priority".format(name))
         stories.append(story)
 
-    block = build_block(stories, done_count, docs_dir)
+    block = build_block(stories, docs_dir)
 
     text = open(board, encoding="utf-8").read()
     if BEGIN not in text or END not in text:
@@ -227,7 +263,8 @@ def main(argv):
         with open(board, "w", encoding="utf-8") as fh:
             fh.write(new_text)
 
-    active = len(stories)
+    done_count = sum(1 for s in stories if s["status"] == "done")
+    active = len(stories) - done_count
     print("board {}: {} active story(ies), {} done{}".format(
         "rewritten" if changed else "already current",
         active, done_count, "" if not warnings else " — {} warning(s)".format(len(warnings))))

@@ -1,7 +1,7 @@
 {
   "name": "track",
   "displayName": "Track — spec-driven backlog",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A four-layer, in-repo tracking framework (vision -> roadmap -> stories -> designs) with a deterministic status board generated from story frontmatter. Slash commands cover the full story lifecycle; a self-orienting skill teaches any agent to read the board and pick up the next ready story.",
   "author": {
     "name": "codewandler",

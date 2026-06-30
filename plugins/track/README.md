@@ -12,6 +12,7 @@ Four layers, all plain markdown in your repo:
 
 ```
 docs/
+  README.md            # the docs map — where to find everything
   vision.md            # why the project exists + principles (the tie-breaker)
   roadmap.md           # status, what's next, epic narratives
   stories/
@@ -19,12 +20,16 @@ docs/
     <ID>-<slug>.md      # one file per story (frontmatter is the source of truth)
     _TEMPLATE.md
   designs/<slug>.md     # design records for non-trivial stories & epics
-CHANGELOG.md           # done stories roll up here
+  archive/             # superseded designs / notes
+CHANGELOG.md           # released history
 ```
 
-A story's frontmatter (`id`, `title`, `status`, `priority`, optional `pillar`/`design`/`epic`) is the
-**single source of truth**; the board is a generated view. The "Start here" loop (written into your
-`AGENTS.md` by `/track:init`) makes every agent read the board and take the top `ready` story.
+A story's frontmatter (`id`, `title`, `status`, `priority`, optional `pillar`/`design`/`epic`/`note`)
+is the **single source of truth**; the board is a generated view. The generated board carries per-row
+annotations (`note`), one-line epic blurbs (pulled from each epic's design doc), and a Done list — so
+it stays as context-rich as a hand-curated board, without anyone hand-editing it. The "Start here"
+loop (written into your `AGENTS.md` by `/track:init`) makes every agent read the board and take the
+top `ready` story.
 
 ## Install
 

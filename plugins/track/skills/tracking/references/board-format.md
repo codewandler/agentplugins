@@ -22,25 +22,26 @@ are."** It has two parts:
 | **Next** | `ready` stories | by `priority` ascending (missing priority last), then `id` |
 | **Blocked** | `blocked` stories | by `id` |
 | **Backlog** | `backlog` stories | by `id` |
-| **Done** | a one-line count + pointer to `CHANGELOG.md` | — |
-
-`done` stories are **not** listed individually on the board — they roll into the changelog.
+| **Done** | `done` stories (flat list) + a pointer to `CHANGELOG.md` | by `id` |
 
 ## Row format
 
 ```
-- [<ID> — <title>](<file>) · <pillar>
+- [<ID> — <title>](<file>) · <pillar> · <note>
 ```
 
 `<file>` is the story filename (board and stories share a directory, so the link is relative). The
-`· <pillar>` suffix is omitted when the story has no `pillar`.
+`· <pillar>` and `· <note>` suffixes are each omitted when that frontmatter field is absent. The
+`note` field is how a row stays context-rich (e.g. `· **top pick** · unblocks the assistant flow`)
+without anyone hand-editing the generated board — the annotation lives in the story's frontmatter.
 
 ## Epic grouping
 
 Within **Next** and **Backlog**, stories that share an `epic:` slug are grouped under a `### <Epic
-title>` subheader. The epic title is resolved from the H1 of `docs/designs/<epic>.md` if that file
+title>` subheader, followed by an optional one-line **blurb** (the first line under the epic design
+doc's `## Why`). The epic title is resolved from the H1 of `docs/designs/<epic>.md` if that file
 exists, otherwise the slug is title-cased. Stories with no `epic` are listed first (ungrouped), then
-the epic groups in alphabetical order of slug.
+the epic groups in alphabetical order of slug. **Done** is a flat list (not epic-grouped).
 
 ## Regenerating
 
