@@ -26,7 +26,7 @@ agent to read the board and pick up the next ready story. Modeled on the system 
 ```
 
 Then in any repo: `/track:init` to scaffold, `/track:story` / `/track:epic` to add work,
-`/track:board` to sync, `/track:next` to pick up the next story. See
+`/track:board` to sync, `/track:next [area]` to pick up the next story. See
 [`plugins/track/README.md`](plugins/track/README.md) for the full guide.
 
 For team-wide auto-install, declare it in a repo's `.claude/settings.json`:

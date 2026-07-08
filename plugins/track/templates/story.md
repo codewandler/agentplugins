@@ -6,6 +6,7 @@ status: backlog
 priority:
 design:
 epic:
+areas:
 note:
 ---
 

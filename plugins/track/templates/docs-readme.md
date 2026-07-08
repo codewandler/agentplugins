@@ -21,4 +21,5 @@ roadmap, story status, design records, and notes. Work is tracked with the **tra
 Every contributor — human or agent — starts at [AGENTS.md](../AGENTS.md) → **"Start here"**: open the
 [board](stories/README.md), take the top `ready` story by priority, follow the loop, keep the gate
 green. New or unscoped work? Create a story first (`/track:story`) so the next agent inherits the
-context. After any change to a story's status/priority/title/epic/note, run `/track:board`.
+context. After any change to a story's status/priority/title/epic/note, run `/track:board`. Optional
+story `areas` are query-only subsystem tags for selection, e.g. `/track:next flux-lang`.

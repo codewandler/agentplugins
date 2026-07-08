@@ -17,12 +17,15 @@ line (`---`) and the next `---`. Parse it as `key: value` per line:
 
 - Split on the **first** `:` only. Trim whitespace from key and value.
 - If the value is wrapped in matching single or double quotes, strip them.
-- Fields used: `id`, `title`, `pillar`, `status`, `priority`, `epic`. (`design` is ignored here.)
+- Fields read: `id`, `title`, `pillar`, `status`, `priority`, `epic`, `areas`, `note`. `areas` is
+  query-only metadata and does not render on the board. (`design` is ignored here.)
 
 **Normalize the status** before matching: lowercase it and replace runs of whitespace/underscores
 with a single hyphen (so `In Progress`, `in progress`, `in_progress` all become `in-progress`).
 **Parse the priority** leniently: use the first integer found in the value (`P1` → 1, `3` → 3); if
 there's no integer, treat the priority as absent.
+**Parse areas** as a query-only comma-separated list. The preferred spelling is
+`areas: [flux-lang, flux-flow]`; a single bare value like `areas: flux-lang` is accepted as one area.
 
 Skip a file (with a warning) if it has no frontmatter, is missing any of `id`/`title`/`status`, or
 has a normalized `status` not in `backlog | ready | in-progress | blocked | done`. Record a warning
@@ -67,6 +70,7 @@ Each story row, joining the present parts with ` · ` (U+00B7); the em dash in t
 
 Omit `<pillar>` and/or `<note>` when that frontmatter field is absent (so a story with neither renders
 just `- [<id> — <title>](<filename>)`).
+Do not render `areas`; they are for filtering and search, not board row display.
 
 Build the block (note the exact headings and the blank line between sections):
 

@@ -24,12 +24,13 @@ docs/
 CHANGELOG.md           # released history
 ```
 
-A story's frontmatter (`id`, `title`, `status`, `priority`, optional `pillar`/`design`/`epic`/`note`)
-is the **single source of truth**; the board is a generated view. The generated board carries per-row
-annotations (`note`), one-line epic blurbs (pulled from each epic's design doc), and a Done list — so
-it stays as context-rich as a hand-curated board, without anyone hand-editing it. The "Start here"
-loop (written into your `AGENTS.md` by `/track:init`) makes every agent read the board and take the
-top `ready` story.
+A story's frontmatter (`id`, `title`, `status`, `priority`, optional `pillar`/`design`/`epic`/
+`areas`/`note`) is the **single source of truth**; the board is a generated view. The generated board
+carries per-row annotations (`note`), one-line epic blurbs (pulled from each epic's design doc), and a
+Done list — so it stays as context-rich as a hand-curated board, without anyone hand-editing it. Use
+`areas: [subsystem]` for query-only tags such as `flux-lang`, `cli`, or `website`; areas are not
+rendered on board rows. The "Start here" loop (written into your `AGENTS.md` by `/track:init`) makes
+every agent read the board and take the top `ready` story.
 
 ## Install
 
@@ -58,13 +59,20 @@ reuse it with the same two commands. For team-wide auto-install, add to a repo's
 | `/track:story [title]` | Create a story — allocates the next ID, writes the file, syncs the board. |
 | `/track:epic [name]` | Start an epic — a design doc + roadmap narrative + optional child stories. |
 | `/track:board [docs-dir]` | Regenerate the board from story frontmatter. |
-| `/track:next` | Report the top `ready` story and offer to start it. |
+| `/track:next [area]` | Report the top `ready` story, optionally filtered by `areas`. |
 | `/track:done <ID>` | Close a story — set `status: done`, add a CHANGELOG entry, sync the board. |
 | `/track:design <ID> [slug]` | Create/link a design doc for a story. |
 
 The `tracking` skill auto-activates when you mention stories, the backlog, the roadmap, epics, or ask
 "what's next" — it teaches the conventions so the commands aren't even strictly required. The
 `story-implementer` agent implements a single story end-to-end (failing-first test → gate → status).
+
+Examples for subsystem-focused selection:
+
+```bash
+/track:next flux-lang
+rg -l '^areas: .*flux-lang' docs/stories
+```
 
 ## Board generation
 

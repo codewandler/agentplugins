@@ -72,6 +72,23 @@ def parse_priority(value):
     return int(m.group()) if m else None
 
 
+def parse_areas(value):
+    """Parse optional query-only area tags from a small YAML-ish frontmatter value."""
+    value = (value or "").strip()
+    if not value:
+        return []
+    if value.startswith("[") and value.endswith("]"):
+        value = value[1:-1]
+    areas = []
+    for part in value.split(","):
+        area = part.strip()
+        if (len(area) >= 2) and area[0] == area[-1] and area[0] in ("'", '"'):
+            area = area[1:-1].strip()
+        if area:
+            areas.append(area)
+    return areas
+
+
 def natural_id_key(story_id):
     """Sort key so D-2 precedes D-10 and prefixes group together."""
     m = re.match(r"^([A-Za-z]+)[-_ ]?(\d+)", story_id or "")
@@ -235,6 +252,7 @@ def main(argv):
 
         story = {"id": sid, "title": title, "status": status, "file": name,
                  "pillar": fm.get("pillar"), "epic": fm.get("epic"),
+                 "areas": parse_areas(fm.get("areas")),
                  "note": fm.get("note")}
         prio = fm.get("priority")
         if prio not in (None, ""):

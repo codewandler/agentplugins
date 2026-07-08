@@ -25,14 +25,17 @@ Create a new story. `$ARGUMENTS` (if given) is the story title.
    - **priority** — only if `ready`: ask for the integer rank (lower = higher); default to one past the
      current max ready priority.
    - **epic** — optional; if the user names one, use its slug.
+   - **areas** — optional query-only subsystem tags such as `flux-lang`, `flux-flow`, `website`, `cli`,
+     or `plugins`. Write them as an inline list: `areas: [flux-lang, flux-flow]`.
 
 4. **Allocate the ID.** `<PREFIX>-<next number for that prefix>`. Build a slug from the title
    (lowercase, words joined by `-`, punctuation dropped).
 
 5. **Write the file.** `docs/stories/<ID>-<slug>.md` from `templates/story.md` (resolve the templates
    dir as in `/track:init`), substituting `{{ID}}`, `{{TITLE}}`, `{{PILLAR}}` and setting `status`
-   (and `priority`/`epic` if provided). Leave the body sections as prompts for the user to fill, or
-   draft a first-pass `## Goal`/`## Acceptance` from the title if the user gave enough detail.
+   (and `priority`/`epic`/`areas` if provided). Leave the body sections as prompts for the user to
+   fill, or draft a first-pass `## Goal`/`## Acceptance` from the title if the user gave enough
+   detail.
 
 6. **Sync the board.** Run `/track:board`.
 

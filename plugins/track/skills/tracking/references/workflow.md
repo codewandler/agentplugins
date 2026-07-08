@@ -9,7 +9,8 @@ that `/track:init` writes into `AGENTS.md`, so any agent that reads either one b
    uncommitted changes as user-owned unless you made them; never reset/discard/force-push them
    without an explicit instruction.
 2. **What to work on** — if the user named work, do that. Otherwise open the board
-   (`docs/stories/README.md`) and take the top `ready` story by `priority`. `/track:next` reports it.
+   (`docs/stories/README.md`) and take the top `ready` story by `priority`. `/track:next` reports it;
+   `/track:next <area>` filters by optional story `areas`.
 3. **The contract** — read the story's `## Goal` and `## Acceptance`. Acceptance defines "done". If
    it links a `design:`, read that too.
 4. **Set status** — mark the story `in-progress` (and `/track:board`).
@@ -24,7 +25,7 @@ that `/track:init` writes into `AGENTS.md`, so any agent that reads either one b
 ## Discipline
 
 - **One source of truth.** Story frontmatter drives the board. After any status/priority/title/epic
-  change, run `/track:board`.
+  change, run `/track:board`. Use optional `areas` tags for query-only subsystem selection.
 - **Auditability.** Non-trivial behavior gets a story, a design (if warranted), a failing-first test,
   and a CHANGELOG entry.
 - **Don't commit without an explicit instruction.** When you do commit, match the repo's existing

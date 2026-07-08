@@ -32,7 +32,8 @@ Plus: `CHANGELOG.md` (done stories roll up here) and `docs/archive/` (superseded
 1. Run `git status --short --branch`. Treat uncommitted changes as user-owned unless you made them.
 2. If the user named a story, file, or task, **that** scopes the work.
 3. Otherwise open the board (`docs/stories/README.md`) and take the **top `ready` story by
-   `priority`** (lower integer = higher priority). `/track:next` reports it for you.
+   `priority`** (lower integer = higher priority). `/track:next` reports it for you; pass an area
+   slug to filter by optional story `areas`.
 4. Read that story's `## Goal` and `## Acceptance` — they define what "done" means. If it links a
    `design:`, read it.
 
@@ -52,6 +53,8 @@ The board's status lists live between `<!-- BEGIN track:board -->` and `<!-- END
 **After any change to a story's `status`, `priority`, `title`, or `epic`, regenerate the board** with
 `/track:board`. Everything outside the markers (intro, status summary, epic narratives) is
 hand-written and preserved. Story frontmatter is the single source of truth; the board is a view.
+Use optional `areas: [subsystem]` tags when you need queryable subsystem selection; areas are not
+rendered on board rows.
 
 ## Frontmatter (the contract)
 
@@ -64,6 +67,7 @@ status: ready         # backlog | ready | in-progress | blocked | done
 priority: 1           # integer rank among `ready` stories (lower = higher); omit otherwise
 design:               # optional path: docs/designs/<slug>.md
 epic:                 # optional epic slug; groups this story on the board + roadmap
+areas: [flux-lang]    # optional query-only subsystem tags; not rendered on the board
 note:                 # optional one-line annotation rendered after the title on the board
 ---
 ```
@@ -79,7 +83,7 @@ board structure and generation rules, and `references/workflow.md` for the per-s
 | `/track:story` | Create a new story (allocates the next ID, drops it in `docs/stories/`, syncs the board). |
 | `/track:epic` | Create an epic: a design doc + a roadmap narrative + (optionally) child stories. |
 | `/track:board` | Regenerate the board from story frontmatter. |
-| `/track:next` | Report the top `ready` story and offer to start it. |
+| `/track:next [area]` | Report the top `ready` story, optionally filtered by `areas`. |
 | `/track:done` | Close a story: status, CHANGELOG entry, board sync. |
 | `/track:design` | Create/link a design doc for a story. |
 

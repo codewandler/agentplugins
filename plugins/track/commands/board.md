@@ -21,8 +21,9 @@ path somehow didn't resolve, find the script with
 Report the generator's summary line (and any warnings) to the user. The script:
 - rewrites only the region between `<!-- BEGIN track:board -->` and `<!-- END track:board -->`,
   preserving the hand-written intro / status summary / epic narratives;
-- groups stories by status (Now / Next / Blocked / Backlog) and by `epic`; rolls `done` into a count
-  pointing at `CHANGELOG.md`;
+- groups stories by status (Now / Next / Blocked / Backlog) and by `epic`; lists `done` stories with
+  a `CHANGELOG.md` pointer;
+- parses optional `areas` metadata for query consumers but does not render it on board rows;
 - is idempotent (a second run makes no change).
 
 ## If python3 is unavailable

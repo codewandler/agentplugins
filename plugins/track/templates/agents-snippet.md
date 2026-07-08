@@ -8,7 +8,7 @@ This project tracks work with the **track** framework: every unit of work is a m
    uncommitted changes as user-owned unless you made them.
 2. **What to work on** — if the user named work, do that. Otherwise open the
    [board](docs/stories/README.md) and take the top `ready` story by `priority` (lower = higher).
-   `/track:next` reports it.
+   `/track:next` reports it; `/track:next <area>` filters by optional story `areas`.
 3. **The contract** — read the story's `## Goal` and `## Acceptance`; Acceptance defines "done". Read
    any linked `design:`.
 4. **Do the work** — set the story `in-progress`; non-trivial design goes in `docs/designs/` first;
@@ -18,5 +18,6 @@ This project tracks work with the **track** framework: every unit of work is a m
    context.
 
 The board's status lists are generated — after any change to a story's `status`/`priority`/`title`/
-`epic`, run `/track:board`. Story frontmatter is the single source of truth.
+`epic`, run `/track:board`. Use optional `areas: [subsystem]` tags for query-only subsystem selection
+without changing board rows. Story frontmatter is the single source of truth.
 <!-- END track:agents -->

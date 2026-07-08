@@ -15,6 +15,7 @@ are views derived from it.
 | `priority` | when `ready` | integer | Rank among `ready` stories — **lower = higher priority** (1 is the top pick). Omit for non-ready stories. Ties break on `id`. |
 | `design` | no | path | Repo-relative path to a design doc, e.g. `docs/designs/endpoint-discovery.md`. |
 | `epic` | no | slug | Groups the story under an epic on the board and roadmap. The slug should match a design doc basename in `docs/designs/<epic>.md` so the epic title and blurb can be resolved from that doc. |
+| `areas` | no | list | Query-only subsystem tags, e.g. `areas: [flux-lang, flux-flow, website]`. Use this for crate/module/product-surface selection without overloading `pillar`. Areas are not rendered on board rows. |
 | `note` | no | string | A short annotation rendered after the title on the board (e.g. `**top pick** · unblocks the assistant flow`). Keep it to one line; markdown is allowed. This is how board rows stay context-rich without hand-editing the board. |
 
 ## ID / prefix scheme
@@ -24,6 +25,15 @@ are views derived from it.
   prefix like `S` (Story) or `T` (Task).
 - `/track:story` infers the existing prefixes from the stories already present and allocates the next
   number for the chosen prefix. Don't renumber existing stories.
+
+## Areas vs. pillars
+
+- `pillar` is a broad project legend (`Agent`, `Language`, `Improve`, `Core`) and is echoed on board
+  rows.
+- `areas` is narrower query metadata for subsystem ownership or selection (`flux-lang`, `flux-flow`,
+  `website`, `cli`, `plugins`). Prefer the inline list spelling: `areas: [flux-lang, flux-flow]`.
+- Use `/track:next flux-lang` or a search like `rg -l '^areas: .*flux-lang' docs/stories` when you
+  want a story mostly concerned with that subsystem.
 
 ## Status lifecycle
 

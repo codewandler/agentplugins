@@ -34,6 +34,8 @@ are."** It has two parts:
 `· <pillar>` and `· <note>` suffixes are each omitted when that frontmatter field is absent. The
 `note` field is how a row stays context-rich (e.g. `· **top pick** · unblocks the assistant flow`)
 without anyone hand-editing the generated board — the annotation lives in the story's frontmatter.
+The optional `areas` field is deliberately **not** rendered; it is query-only metadata for selecting
+stories by subsystem without widening the board rows.
 
 ## Epic grouping
 
