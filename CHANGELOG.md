@@ -2,6 +2,28 @@
 
 All notable changes to codewandler/agentplugins are documented in this file.
 
+## [0.4.0] - 2026-07-08
+
+### Added
+
+#### rust-pro Plugin (0.1.0)
+
+- **`rust-pro`** — an idiomatic-Rust specialist skill packaged as an installable plugin. A compact
+  `SKILL.md` (role, when-to-use, workflow, MUST/MUST-NOT constraints) routes via progressive
+  disclosure to six code-heavy references:
+  - `ownership.md` — move/Copy/borrow/clone, lifetimes & elision, `Box`/`Rc`/`Arc`/`RefCell`/`Cow`, `Weak` cycles.
+  - `error-handling.md` — `Result`/`?`, `thiserror` (libraries) vs `anyhow` (apps), the `Error` contract, panic policy.
+  - `traits-generics.md` — trait design, static vs `dyn` dispatch, dyn compatibility, conversions, builder & typestate, async traits.
+  - `async-concurrency.md` — Tokio, `Send`/`Sync`, channels, `select!`/`JoinSet`, `rayon`, scoped threads, the no-lock-across-`.await` rule.
+  - `testing.md` — unit/integration/doc tests, `nextest`, `proptest`, `criterion`, Miri, `unsafe` review.
+  - `project-structure.md` — Cargo workspaces, feature flags, MSRV/resolver v3, `clippy`/`rustfmt`, edition-2024 changes, release profiles.
+- Content researched against the **Rust 2024 edition** (shipped with Rust 1.85) and the mid-2026
+  ecosystem: `async fn` in traits stable but not `dyn`-compatible, async-std discontinued
+  (RUSTSEC-2025-0052) with Tokio the default runtime, built-in `#[bench]` removed from stable, and
+  lints centralized via the `[lints]` table.
+- Registered in `.claude-plugin/marketplace.json` (marketplace bumped to 0.4.0); root `README.md`
+  updated with install instructions and the reference map.
+
 ## [0.3.0] - 2026-06-30
 
 ### Changed
@@ -98,6 +120,7 @@ references were updated together; re-validated with `claude plugin validate --st
 
 ---
 
+[0.4.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.4.0
 [0.3.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.3.0
 [0.2.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.2.0
 [0.1.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.1.0

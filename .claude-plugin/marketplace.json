@@ -5,7 +5,7 @@
     "url": "https://github.com/codewandler"
   },
   "description": "Reusable Claude Code plugins from codewandler.",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "plugins": [
     {
       "name": "track",
@@ -15,6 +15,15 @@
       "license": "MIT",
       "category": "project-management",
       "keywords": ["planning", "backlog", "stories", "roadmap", "epics", "tracking", "board"]
+    },
+    {
+      "name": "rust-pro",
+      "source": "./plugins/rust-pro",
+      "description": "Senior-Rust-engineer skill for safe, idiomatic, high-performance Rust (2024 edition). Progressive-disclosure references cover ownership & lifetimes, error handling (thiserror/anyhow), traits & generics, async & concurrency (Tokio), testing, and Cargo project structure & tooling.",
+      "version": "0.1.0",
+      "license": "MIT",
+      "category": "language",
+      "keywords": ["rust", "cargo", "async", "tokio", "ownership", "traits", "error-handling", "clippy"]
     }
   ]
 }

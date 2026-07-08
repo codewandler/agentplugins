@@ -1,0 +1,14 @@
+{
+  "name": "rust-pro",
+  "displayName": "Rust Pro — idiomatic Rust specialist",
+  "version": "0.1.0",
+  "description": "A senior-Rust-engineer skill for building safe, idiomatic, high-performance Rust (2024 edition). Progressive-disclosure references cover ownership & lifetimes, error handling, traits & generics, async & concurrency, testing, and project structure & tooling.",
+  "author": {
+    "name": "codewandler",
+    "url": "https://github.com/codewandler"
+  },
+  "homepage": "https://github.com/codewandler/agentplugins/tree/main/plugins/rust-pro",
+  "repository": "https://github.com/codewandler/agentplugins",
+  "license": "MIT",
+  "keywords": ["rust", "cargo", "async", "tokio", "ownership", "traits", "error-handling", "clippy"]
+}

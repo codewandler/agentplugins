@@ -40,6 +40,21 @@ For team-wide auto-install, declare it in a repo's `.claude/settings.json`:
 }
 ```
 
+### rust-pro — idiomatic Rust specialist
+
+A single progressive-disclosure **skill** that makes any agent a senior Rust engineer for the
+**2024 edition** (Rust 1.85+): a compact `SKILL.md` routes to six code-heavy references — ownership &
+lifetimes, error handling (`thiserror`/`anyhow`), traits & generics, async & concurrency (Tokio),
+testing, and Cargo project structure & tooling. It enforces the expert posture: make illegal states
+unrepresentable, borrow before cloning, zero-cost static dispatch by default, typed library errors,
+and a green `fmt` + `clippy` + `nextest` gate.
+
+```
+/plugin install rust-pro@agentplugins
+```
+
+See [`plugins/rust-pro/README.md`](plugins/rust-pro/README.md) for the reference map.
+
 ### coder *(reference material — not yet a Claude Code plugin)*
 
 `plugins/coder/` holds skill, command, and reference definitions for a terminal software-engineering
@@ -55,6 +70,9 @@ plugins/
   track/                          # the spec-driven backlog plugin (installable)
     .claude-plugin/plugin.json
     commands/  skills/  agents/  scripts/  templates/
+  rust-pro/                       # the idiomatic-Rust specialist skill (installable)
+    .claude-plugin/plugin.json
+    skills/rust-pro/SKILL.md + references/
   coder/                          # legacy reference content (not registered)
 ```
 
