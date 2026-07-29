@@ -4,6 +4,34 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-07-29
+
+### Added
+
+#### Track Plugin (0.4.0)
+
+- **`impl-coord` — autonomous backlog coordination.** A new skill that works the backlog as
+  fan-out waves instead of one story at a time: it selects independent `ready` stories via a
+  fail-closed disjointness test (biasing toward freshly review-derived epics/stories), dispatches
+  each to an isolated worktree implementor, reviews returned diffs as evidence (re-running the
+  claimed failing-first test against the merge base), and integrates serially with the project's
+  full gate run after every `--no-ff` merge. Shared ledgers (CHANGELOG, board, roadmap, lockfiles)
+  are fenced to the coordinator, which is what makes stories independent at all. Bounded autonomy:
+  the skill invocation authorizes worktrees, implementor commits, merges and ledger edits — never a
+  push, tag, release, or history rewrite. Design rationale in `skills/impl-coord/DESIGN.md`.
+- **`story-impl` agent** — implements exactly one story inside its own git worktree on a scratch
+  `impl/<ID>` branch: failing-first test, implementation, full gate until green, commits on its
+  branch, and a structured, parseable handoff report. Never touches the main branch, never pushes,
+  never edits fenced ledgers. (The existing `story-implementer` remains the single-story,
+  main-tree, no-commit variant.)
+- **`story-review` agent** — independent read-only second review, spawned when a diff touches the
+  project's safety envelope (auth/permissions, secret handling, dispatch chokepoints, declared
+  safety invariants, published public APIs). Grades against declared invariants with
+  `path:line` evidence and returns a PASS/REWORK/PARK verdict; it changes nothing.
+
+Extracted and generalized from the flux repo's in-repo coordinator (its repo-local skill, agents,
+and design record moved here); marketplace bumped to 0.6.0.
+
 ## [0.5.0] - 2026-07-09
 
 ### Added

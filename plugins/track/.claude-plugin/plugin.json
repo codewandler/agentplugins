@@ -1,8 +1,8 @@
 {
   "name": "track",
   "displayName": "Track — spec-driven backlog",
-  "version": "0.3.0",
-  "description": "A four-layer, in-repo tracking framework (vision -> roadmap -> stories -> designs) with a deterministic status board generated from story frontmatter. Slash commands cover the full story lifecycle; a self-orienting skill teaches any agent to read the board and pick up the next ready story.",
+  "version": "0.4.0",
+  "description": "A four-layer, in-repo tracking framework (vision -> roadmap -> stories -> designs) with a deterministic status board generated from story frontmatter. Slash commands cover the full story lifecycle; a self-orienting skill teaches any agent to read the board and pick up the next ready story. The impl-coord skill works the backlog autonomously: it fans independent ready stories out to isolated worktree implementors, reviews each diff as evidence, and integrates serially with the gate green after every merge.",
   "author": {
     "name": "codewandler",
     "url": "https://github.com/codewandler"

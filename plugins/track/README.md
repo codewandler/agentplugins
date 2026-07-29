@@ -67,6 +67,26 @@ The `tracking` skill auto-activates when you mention stories, the backlog, the r
 "what's next" — it teaches the conventions so the commands aren't even strictly required. The
 `story-implementer` agent implements a single story end-to-end (failing-first test → gate → status).
 
+## Working the backlog autonomously — `impl-coord`
+
+For "just get the ready stories done without asking me", the `impl-coord` skill turns the session
+into a coordinator that fans independent work out and merges it back safely:
+
+- **Wave selection.** Picks `ready` stories by priority (biasing toward freshly review-derived
+  epics/stories, whose findings decay fastest), predicts each story's write set, and only co-schedules
+  stories that pass a fail-closed disjointness test. A wave of size 1 is a normal outcome.
+- **Isolated implementors.** Each story goes to a `story-impl` agent in its own git worktree on a
+  scratch `impl/<ID>` branch. Shared ledgers (CHANGELOG, board, roadmap, lockfiles) are **fenced** —
+  only the coordinator writes them, at integration, which is what makes stories independent at all.
+- **Evidence-based review.** The coordinator reviews the diff, never the implementor's summary —
+  starting by re-running the claimed failing-first test against the merge base. Diffs that touch the
+  project's safety envelope get a second, independent read from the read-only `story-review` agent.
+- **Serial gated integration.** `--no-ff` merges land one at a time with the project's full gate run
+  after every merge; a red gate reverts exactly that merge and parks the story. Nothing is ever
+  pushed — the wave report ends with the push command for you to run.
+
+The full rationale lives in [`skills/impl-coord/DESIGN.md`](skills/impl-coord/DESIGN.md).
+
 Examples for subsystem-focused selection:
 
 ```bash
