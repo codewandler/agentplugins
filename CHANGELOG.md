@@ -4,6 +4,34 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-07-29
+
+### Added
+
+#### Flux Agent Plugin (0.1.0) — new
+
+- **`flux-agent` — drive the flux agent as a sub-agent, over a protocol instead of prose.**
+  Dispatching work to [flux](https://github.com/codewandler/flux) headlessly is currently
+  untrustworthy in a specific, reproducible way: a turn that dies on a provider error exits **0**,
+  emits no NDJSON `error` line, and reports the failure as prose inside an otherwise-normal
+  `turn_end` (a stage `Err` is converted into an `Ok` value in `flux-flow`'s `detect_intent` /
+  `explore`). A dropped provider stream additionally ends a long run outright, with no retry. The
+  plugin encodes the workarounds so they are not rediscovered mid-task.
+  - **`flux-agent` skill** — the three trust rules (never key on the exit code; never trust a clean
+    `turn_end`; ground truth is a predicate you evaluate yourself), plus evidence-based model
+    selection, task-prompt discipline, and worktree/disk isolation guidance for fan-out.
+  - **`references/protocol.md`** — the observed `--stream-json` line vocabulary field by field,
+    which fields are safe to key on, and a deterministic reproducer for the failure-looks-like-
+    success gap.
+  - **`scripts/flux_run.py`** — speaks NDJSON, classifies failures as transport (retryable) vs task
+    (never retryable), resumes transport failures via `flux run --continue` with bounded backoff,
+    **stops on a failure that repeats identically** rather than burning budget re-running a
+    deterministic bug, and verifies completion against a `--success-cmd` ground-truth predicate that
+    overrules any claim the model makes. Emits one JSON result; exits non-zero unless the predicate
+    is satisfied.
+  - **`scripts/test_flux_run.py`** — offline tests for the classifier. No network, key, or flux
+    binary required.
+
 ## [0.6.1] - 2026-07-29
 
 ### Changed

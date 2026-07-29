@@ -1,0 +1,14 @@
+{
+  "name": "flux-agent",
+  "displayName": "Flux Agent — drive flux as a sub-agent",
+  "version": "0.1.0",
+  "description": "Dispatch work to the flux agent (codewandler/flux) over its NDJSON line protocol instead of scraping rendered prose. Ships a skill teaching the trust rules for an unattended flux run — the exit code and a clean `turn_end` both lie when a turn dies on a provider error — plus a wrapper script that classifies transport vs task failures, resumes transport failures with bounded backoff, stops on a repeating deterministic failure, and verifies completion against a caller-supplied ground-truth predicate.",
+  "author": {
+    "name": "codewandler",
+    "url": "https://github.com/codewandler"
+  },
+  "homepage": "https://github.com/codewandler/agentplugins/tree/main/plugins/flux-agent",
+  "repository": "https://github.com/codewandler/agentplugins",
+  "license": "MIT",
+  "keywords": ["flux", "sub-agent", "ndjson", "protocol", "headless", "orchestration", "openrouter", "retry"]
+}
