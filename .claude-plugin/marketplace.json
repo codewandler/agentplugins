@@ -5,13 +5,13 @@
     "url": "https://github.com/codewandler"
   },
   "description": "Reusable Claude Code plugins from codewandler.",
-  "version": "0.7.0",
+  "version": "0.7.1",
   "plugins": [
     {
       "name": "flux-agent",
       "source": "./plugins/flux-agent",
       "description": "Drive the flux agent (codewandler/flux) as a sub-agent over its NDJSON line protocol instead of scraping rendered prose. A skill teaches the trust rules for an unattended flux run — the exit code and a clean `turn_end` both report success when a turn died on a provider error — and a tested wrapper script classifies transport vs task failures, resumes transport failures with bounded backoff, stops on a repeating deterministic failure, and verifies completion against a caller-supplied ground-truth predicate.",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "license": "MIT",
       "category": "orchestration",
       "keywords": ["flux", "sub-agent", "ndjson", "protocol", "headless", "orchestration", "openrouter", "retry"]

@@ -12,3 +12,7 @@ Thumbs.db
 # Build
 dist/
 bin/
+
+# Python
+__pycache__/
+*.py[cod]

@@ -4,6 +4,16 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.7.1] - 2026-07-29
+
+### Fixed
+
+#### Flux Agent Plugin (0.1.1)
+
+- **Removed a stray `__pycache__/*.pyc` that shipped in 0.7.0.** Running the plugin's own offline
+  tests before packaging left a compiled artifact in `scripts/`, which was then committed and
+  distributed. Untracked it and added a Python section to `.gitignore` so it cannot recur.
+
 ## [0.7.0] - 2026-07-29
 
 ### Added
