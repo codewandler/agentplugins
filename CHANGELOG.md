@@ -4,6 +4,22 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-07-29
+
+### Changed
+
+#### Track Plugin (0.4.1)
+
+- **`impl-coord` — disk is now a running budget, not a one-time check.** Real multi-wave runs
+  exhaust disk: each worktree pays its own cold build, the integration tree's `target/` balloons
+  across repeated gates, and on some toolchains ENOSPC surfaces as opaque compiler/linker errors
+  rather than "disk full". §1.7 now tells the coordinator to reclaim *before* fanning out when space
+  is already tight, and §4.7 makes disk reclamation part of the integration loop — `git worktree
+  remove` + `git worktree prune` after each integration, and `cargo clean` the integration tree
+  between waves when free space tightens (it is rebuilt cold at the next gate regardless). Both carry
+  an explicit guard: never `cargo clean` or remove a worktree that still holds an unreviewed,
+  unmerged, or parked diff.
+
 ## [0.6.0] - 2026-07-29
 
 ### Added

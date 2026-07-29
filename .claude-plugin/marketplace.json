@@ -5,13 +5,13 @@
     "url": "https://github.com/codewandler"
   },
   "description": "Reusable Claude Code plugins from codewandler.",
-  "version": "0.6.0",
+  "version": "0.6.1",
   "plugins": [
     {
       "name": "track",
       "source": "./plugins/track",
       "description": "Spec-driven backlog: vision -> roadmap -> stories -> designs as in-repo markdown, with a deterministic status board generated from story frontmatter. Slash commands for the full story lifecycle, a self-orienting skill so any agent picks up the next ready story, and an impl-coord skill that works the backlog autonomously via parallel worktree implementors with evidence-based review and serial gated integration.",
-      "version": "0.4.0",
+      "version": "0.4.1",
       "license": "MIT",
       "category": "project-management",
       "keywords": ["planning", "backlog", "stories", "roadmap", "epics", "tracking", "board"]

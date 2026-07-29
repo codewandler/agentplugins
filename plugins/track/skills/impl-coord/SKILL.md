@@ -64,9 +64,14 @@ story first, then report. A stop is a report, never an abandonment.
    - neither is an epic tracker.
 
    Fail closed. **A wave of size 1 is a normal outcome** and cheaper than a wrong fan-out.
-7. **Cap the wave at 3**, and check headroom first (`df -h .`) — each worktree pays its own cold
-   build, and on some toolchains disk exhaustion surfaces as opaque compiler/linker errors rather
-   than as "disk full"; if a gate fails strangely mid-wave, suspect disk before the diff.
+7. **Cap the wave at 3**, and treat disk as a *running* budget, not a one-time check. Each worktree
+   pays its own cold build (many GB), and on some toolchains disk exhaustion surfaces as opaque
+   compiler/linker errors rather than as "disk full" — if a gate fails strangely mid-wave, suspect
+   disk before the diff. Before dispatching: `df -h .`. If free space is already trending toward the
+   danger zone, reclaim *before* fanning out — `cargo clean` the integration tree (it is rebuilt cold
+   at the next gate anyway, so the space is cheaper held as headroom than as stale artifacts) and
+   remove any integrated worktrees still on disk. Carry this discipline through the whole run, not
+   just wave one (see §4.7).
 
 Announce the wave in one short block — stories chosen, stories deferred and why — then dispatch
 without waiting for a reply.
@@ -152,8 +157,15 @@ One story at a time. Never merge two before gating.
    `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/gen_board.py docs` — never hand-edit the region between
    `<!-- BEGIN track:board -->` and `<!-- END track:board -->`. Commit it following the repo's
    commit conventions (check `git log`) with a real body.
-7. Remove the worktree once its story is integrated (`git worktree remove <path>`) to reclaim its
-   build artifacts. Keep the branch.
+7. **Reclaim disk as you integrate — part of the loop, not an afterthought.** Once a story is
+   integrated, `git worktree remove <path>` (keep the branch) to drop that worktree's cold-build
+   target, then `git worktree prune` to clear stale admin entries. Check `df -h .` after cold builds:
+   a multi-wave run accumulates worktree targets fast, and the integration tree's own `target/`
+   balloons across repeated gates — when free space tightens, `cargo clean` the integration tree
+   between waves (the next gate rebuilds it cold regardless, and a clean tree also sidesteps the
+   opaque-error failure mode from §1.7). **Never** `cargo clean` or remove a worktree that still
+   holds an unreviewed, unmerged, or parked diff — reclaim only what is already integrated or already
+   has its branch preserved.
 8. **Never push.**
 
 ## 5 · Report
