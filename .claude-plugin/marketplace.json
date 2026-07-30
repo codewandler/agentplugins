@@ -5,25 +5,42 @@
     "url": "https://github.com/codewandler"
   },
   "description": "Reusable Claude Code plugins from codewandler.",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "plugins": [
     {
       "name": "flux-agent",
       "source": "./plugins/flux-agent",
-      "description": "Drive the flux agent (codewandler/flux) as a sub-agent over its NDJSON line protocol instead of scraping rendered prose. A skill teaches the trust rules for an unattended flux run — the exit code and a clean `turn_end` both report success when a turn died on a provider error — and a tested wrapper script classifies transport vs task failures, resumes transport failures with bounded backoff, stops on a repeating deterministic failure, and verifies completion against a caller-supplied ground-truth predicate.",
+      "description": "Drive the flux agent (codewandler/flux) as a sub-agent over its NDJSON line protocol instead of scraping rendered prose. A skill teaches the trust rules for an unattended flux run \u2014 the exit code and a clean `turn_end` both report success when a turn died on a provider error \u2014 and a tested wrapper script classifies transport vs task failures, resumes transport failures with bounded backoff, stops on a repeating deterministic failure, and verifies completion against a caller-supplied ground-truth predicate.",
       "version": "0.1.1",
       "license": "MIT",
       "category": "orchestration",
-      "keywords": ["flux", "sub-agent", "ndjson", "protocol", "headless", "orchestration", "openrouter", "retry"]
+      "keywords": [
+        "flux",
+        "sub-agent",
+        "ndjson",
+        "protocol",
+        "headless",
+        "orchestration",
+        "openrouter",
+        "retry"
+      ]
     },
     {
       "name": "track",
       "source": "./plugins/track",
-      "description": "Spec-driven backlog: vision -> roadmap -> stories -> designs as in-repo markdown, with a deterministic status board generated from story frontmatter. Slash commands for the full story lifecycle, a self-orienting skill so any agent picks up the next ready story, and an impl-coord skill that works the backlog autonomously via parallel worktree implementors with evidence-based review and serial gated integration.",
-      "version": "0.4.1",
+      "description": "Spec-driven backlog: vision -> roadmap -> stories -> designs as in-repo markdown, with a deterministic status board generated from story frontmatter. Slash commands for the full story lifecycle, a self-orienting skill so any agent picks up the next ready story, and an impl-coord skill that works the backlog autonomously via parallel worktree implementors \u2014 artifact-based failing-first proofs, independent review, serial gated integration, a specified degraded mode when implementors cannot be spawned, and reversible-half release cutting.",
+      "version": "0.5.0",
       "license": "MIT",
       "category": "project-management",
-      "keywords": ["planning", "backlog", "stories", "roadmap", "epics", "tracking", "board"]
+      "keywords": [
+        "planning",
+        "backlog",
+        "stories",
+        "roadmap",
+        "epics",
+        "tracking",
+        "board"
+      ]
     },
     {
       "name": "rust-pro",
@@ -32,7 +49,16 @@
       "version": "0.1.0",
       "license": "MIT",
       "category": "language",
-      "keywords": ["rust", "cargo", "async", "tokio", "ownership", "traits", "error-handling", "clippy"]
+      "keywords": [
+        "rust",
+        "cargo",
+        "async",
+        "tokio",
+        "ownership",
+        "traits",
+        "error-handling",
+        "clippy"
+      ]
     }
   ]
 }

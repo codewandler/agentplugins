@@ -1,8 +1,8 @@
 {
   "name": "track",
-  "displayName": "Track — spec-driven backlog",
-  "version": "0.4.1",
-  "description": "A four-layer, in-repo tracking framework (vision -> roadmap -> stories -> designs) with a deterministic status board generated from story frontmatter. Slash commands cover the full story lifecycle; a self-orienting skill teaches any agent to read the board and pick up the next ready story. The impl-coord skill works the backlog autonomously: it fans independent ready stories out to isolated worktree implementors, reviews each diff as evidence, and integrates serially with the gate green after every merge.",
+  "displayName": "Track \u2014 spec-driven backlog",
+  "version": "0.5.0",
+  "description": "A four-layer, in-repo tracking framework (vision -> roadmap -> stories -> designs) with a deterministic status board generated from story frontmatter. Slash commands cover the full story lifecycle; a self-orienting skill teaches any agent to read the board and pick up the next ready story. The impl-coord skill works the backlog autonomously: it resumes unfinished work, fans independent ready stories out to isolated worktree implementors, verifies each one's merge-base failing-first proof, reviews diffs as evidence, integrates serially with the gate green after every merge, and cuts a release when the backlog drains \u2014 doing the reversible half and handing registry publishes over unrun.",
   "author": {
     "name": "codewandler",
     "url": "https://github.com/codewandler"
@@ -10,5 +10,13 @@
   "homepage": "https://github.com/codewandler/agentplugins/tree/main/plugins/track",
   "repository": "https://github.com/codewandler/agentplugins",
   "license": "MIT",
-  "keywords": ["planning", "backlog", "stories", "roadmap", "epics", "tracking", "board"]
+  "keywords": [
+    "planning",
+    "backlog",
+    "stories",
+    "roadmap",
+    "epics",
+    "tracking",
+    "board"
+  ]
 }

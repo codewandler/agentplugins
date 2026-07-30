@@ -46,10 +46,15 @@ branch.
 2. **Branch.** `git switch -c impl/<ID>` before your first commit. All your work lives on it.
 3. **Mark the story.** Set your story's frontmatter `status: in-progress`. Do **not** regenerate the
    board — that file is fenced.
-4. **Failing-first test.** Write the test the Acceptance names. Run it. **Confirm it fails for the
-   right reason** and capture that output — you will quote it in your report, and the reviewer
-   re-runs this test against the merge base. A test that passes before your change is not a
-   failing-first test and your story will be bounced.
+4. **Failing-first test, proved at the merge base.** Write the test the Acceptance names. Run it.
+   **Confirm it fails for the right reason** and capture that output. Your worktree is still at the
+   base here, so this run is also the proof the coordinator checks: record the sha from
+   `git merge-base main HEAD`, the exact test command, and its output verbatim — that trio is your
+   `BASE_PROOF:` field. A test that passes at the base is not a failing-first test and your story
+   will be bounced. The proof is only sound when the build cache is yours: **a shared
+   `CARGO_TARGET_DIR`, or any build directory shared across checkouts, re-runs a stale test
+   binary**, so the output describes some other checkout's code and the proof is worthless while
+   looking rigorous. Build and run in your own worktree with its own target directory.
 5. **Implement.** Match the surrounding code — naming, comment density, module layout, error style.
    Keep the diff scoped to the story; adjacent problems are a finding for your report, not a fix.
 6. **Gate — all of it, in your worktree.** Run every command the coordinator's dispatch or the
@@ -68,7 +73,7 @@ branch.
 
 ## Stop and report instead of guessing
 
-Return a report with `BLOCKED:` and the reason — do not improvise — when:
+Return a report with `VERDICT: BLOCKED` and the reason — do not improvise — when:
 
 - the Acceptance is ambiguous enough that two readings produce different code;
 - satisfying it requires editing a fenced file;
@@ -86,20 +91,31 @@ The coordinator parses this. Keep the headings verbatim.
 ```
 STORY:      <ID> — <title>
 VERDICT:    COMPLETE | PARTIAL | BLOCKED
-WORKTREE:   <absolute path>
 BRANCH:     impl/<ID>
-COMMITS:    <sha> <title>            (one line each)
-FILES:      <path>                   (every file your commits touch)
+WORKTREE:   <absolute path>
 TEST:       <test name / path>
             before: <the failure, quoted>
             after:  <the pass, quoted>
-GATE:       <the tail of each gate command, verbatim — or "not run: <why>">
+BASE_PROOF: $ git merge-base main HEAD → <sha>
+            $ <the exact test command, run in this worktree at that base>
+            <its output, showing the named test failing there>
 ACCEPTANCE: - [x] <item> → <the file:line or test that satisfies it>
             - [ ] <item> → <why not>
+GATE:       <the last ~10 lines of each gate command, verbatim — or "not run: <why>">
+COMMITS:    <sha> <title>            (one line each)
+FILES:      <path>                   (every file your commits touch)
 DEVIATIONS: <anything you did differently from the story or the design, and why>
 RISKS:      <what you would look at first if this broke in production>
 ADJACENT:   <problems you found and deliberately did not fix>
 ```
+
+`VERDICT:` is exactly one of `COMPLETE | PARTIAL | BLOCKED`; **those are the only accepted tokens**,
+and anything else is reworked rather than guessed at. `BASE_PROOF:` absent, empty, or showing the
+named test passing at the base is an **automatic REWORK** — no diff read, no benefit of the doubt —
+and it must come from your own worktree and target directory, or it proves nothing. Cap `GATE:` at
+the tail of each command, roughly the last 10 lines each: **long gate dumps are what push the tail
+fields off the end**, and `ACCEPTANCE:`, `DEVIATIONS:` and `ADJACENT:` are what the coordinator
+reviews you against.
 
 Claims without evidence are worse than silence here — the reviewer reads the diff, and a report that
 oversells it gets the story bounced.

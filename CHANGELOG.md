@@ -4,6 +4,73 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.8.0] - 2026-07-30
+
+### Changed
+
+#### Track Plugin (0.5.0)
+
+Hardening pass over `impl-coord` driven by a meta-analysis of **18 real coordinator runs** across
+three repos (flux, sipx, sipx-clstr) and the **887 subagent transcripts** under them — 116
+`story-impl`, 21 `story-review`. Every change below closes a gap that was measured, not imagined.
+
+The finding that shaped the rest: **rules that become artifacts survive; rules that stay procedures
+decay.** The fence — an enumerable list copied into every dispatch — held at 169/169 (100%). The
+mandated "re-run the failing-first test against the merge base", a procedure the coordinator had to
+remember, ran in ~3% of dispatches; 14 of 18 sessions never did it once.
+
+- **The merge-base proof is now an artifact, not a procedure.** `story-impl` must emit a
+  `BASE_PROOF:` field: the exact command, run in its own worktree against
+  `$(git merge-base main HEAD)`, with output showing the named test failing there. Absent, empty or
+  passing at the base is an automatic REWORK. The coordinator reads a field and spot-checks it when
+  the diff is in the safety envelope or the proof looks synthesised, instead of nominally re-running
+  everything and actually re-running nothing. Both files carry the soundness caveat: a build cache
+  shared across checkouts makes such a proof worthless while it still looks rigorous.
+- **The autonomy boundary now splits reversible from irreversible.** `git push` of the current
+  branch, annotated tags and a GitHub release are authorized; registry uploads
+  (`cargo publish`, `npm publish`), force-push and history rewrites are not. The old boundary
+  forbade the reversible half too, so a finished run stalled to ask permission — most of the 25
+  `AskUserQuestion` calls observed were release-scope questions the skill gave no way to answer, and
+  users authorized a push anyway in 9 of 18 sessions. The governing rule is stated once and reused:
+  *do the reversible half, flag the irreversible half unrun.* New **§6 Cut a release** makes release
+  scope a decision the skill covers.
+- **New §7 degraded mode — when implementors cannot be spawned.** Roughly 1 subagent in 14 (63/887)
+  died to infrastructure rather than to code: org and weekly spend limits, `529 Overloaded`,
+  `Not logged in`. "The coordinator never implements" assumed implementors exist; with none
+  available the model invented a fallback that dropped the branch, the isolation and the independent
+  review, and in one run edited files inside a *live* implementor's worktree. The degraded path is
+  now specified and keeps the audit trail: don't retry into the wall, commit a dead agent's loose
+  work to its own branch, implement on `impl/<ID>` and route it through review and integration
+  normally, spawn a reviewer on your own diff, and mark the story `coordinator-implemented` in the
+  report table so the run stays honest about which diffs had one pair of eyes.
+- **Both concurrency dials retuned.** Wave size becomes a budget — 3 by default, up to 5 when the
+  user asks or `df` shows headroom for that many cold builds — after users asked for 5 in four
+  separate sessions against a flat cap of 3. `story-review` is now spawned for every non-trivial
+  diff and always for the safety envelope (the envelope is a floor, not a ceiling; 42 spawns across
+  169 dispatches, with 4 sessions spawning none), the reviewer is told what the coordinator has
+  *not* verified itself, and long gates run with `run_in_background: true` — a coordinator blocked
+  on a gate or a whole-diff read is the wave's bottleneck. Throughput comes from turnover: an
+  integrated story's files leave the collision set and unblock the next dispatch.
+- **New §1.0 resume before you dispatch.** Requested in five sessions and previously covered
+  nowhere. Unmerged `impl/*` branches and dirty implementor worktrees outrank fresh `ready` stories;
+  a stale branch is brought current by merging `main` into it, never rebasing, because the
+  implementor's history is the audit trail; resume worktrees go outside the harness-owned
+  `.claude/worktrees/` namespace, which gets swept under a running agent; and a "completed" task
+  notification does not mean the agent is finished — on resume its cwd falls back to the shared
+  checkout on `main`.
+- **Report ergonomics and closed verdict vocabularies.** Implementor report fields decayed down the
+  page — `BRANCH:` 100%, `TEST:` 83%, `ACCEPTANCE:` 67%, `ADJACENT:` 57% — so the fields the
+  coordinator most needs to review were the ones most often dropped. The four load-bearing fields
+  now sit directly after identification, `GATE:` is capped at the tail of each command, and the
+  enumerations move to the bottom. `story-impl` returns exactly `COMPLETE | PARTIAL | BLOCKED`;
+  `story-review` returns exactly `PASS | REWORK | PARK` and the coordinator treats any other token
+  as REWORK — 5 of 21 real reviews returned `APPROVE`, `CONCERNS` or `INTEGRATE`. `PARK` now has its
+  trigger spelled out, distinct from `REWORK`, having never once been used in 21 reviews.
+
+`skills/impl-coord/DESIGN.md` is revised rather than appended to, so the design record never states
+two positions at once; its verification list now covers the new behaviours. Marketplace bumped to
+0.8.0.
+
 ## [0.7.1] - 2026-07-29
 
 ### Fixed
@@ -214,6 +281,11 @@ references were updated together; re-validated with `claude plugin validate --st
 
 ---
 
+[0.8.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.8.0
+[0.7.1]: https://github.com/codewandler/agentplugins/releases/tag/v0.7.1
+[0.7.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.7.0
+[0.6.1]: https://github.com/codewandler/agentplugins/releases/tag/v0.6.1
+[0.6.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.6.0
 [0.5.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.5.0
 [0.4.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.4.0
 [0.3.0]: https://github.com/codewandler/agentplugins/releases/tag/v0.3.0
