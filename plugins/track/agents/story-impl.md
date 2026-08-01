@@ -36,14 +36,43 @@ If your story genuinely requires one of them, **stop and report** — do not edi
 around it. That is a dispatch error, and the coordinator will rerun your story solo.
 
 Stay inside your worktree. Never `cd` to another checkout of this repo. Never `git switch` to
-the main branch, never merge, never rebase, never `push`, never `reset --hard`, never touch another
-branch.
+the main branch, never rebase, never `push`, never `reset --hard`, never touch another branch. The
+**one** merge you may perform is bringing your own branch up to `main` (step 1); merging anything
+else, or merging your branch anywhere, is the coordinator's.
 
 ## Procedure
 
-1. **Orient.** `pwd` and `git status --short --branch` to confirm which worktree you are in. Read
-   the files your story names before changing anything — never rely on recall for `path:line`.
-2. **Branch.** `git switch -c impl/<ID>` before your first commit. All your work lives on it.
+1. **Orient, and check your base before you read anything.** `pwd` and
+   `git status --short --branch` to confirm which worktree you are in. Then:
+
+   ```bash
+   git rev-parse HEAD          # where your worktree sits
+   git rev-parse main          # where the coordinator dispatched from
+   ```
+
+   **A worktree is not guaranteed to be at `main`'s tip.** It may have been created before the
+   coordinator's most recent commit — the one that wrote your story file, added a dependency you
+   were told is already there, or landed a sibling story you build on. If the two shas differ and
+   `main` is ahead, you are on a stale base: fix it in step 2 rather than working around it.
+
+   **A file your dispatch names but that does not exist is the loudest symptom of this**, and it is
+   almost never the coordinator inventing a path. Before concluding a brief is wrong — and before
+   authoring a substitute of your own — check the base. If you do end up substituting anything,
+   say so in `DEVIATIONS:` in the first sentence, because the coordinator has to reconcile it
+   against the real file at integration.
+
+   Then read the files your story names — never rely on recall for `path:line`.
+
+2. **Branch, from `main`'s tip.** `git switch -c impl/<ID> main` — naming `main` as the start point
+   creates your branch at the tip *without* checking `main` out, so the prohibition above holds. If
+   you have already committed on a stale `impl/<ID>`, do not start over and do not rebase: commit
+   what you have, then `git merge --no-ff main` into your branch. Your history is the audit trail
+   and the coordinator will merge it as-is. All your work lives on this branch.
+
+   Verify before continuing: `git merge-base main HEAD` must now equal `git rev-parse main`. That
+   equality is also what makes your `BASE_PROOF:` mean what the coordinator reads it to mean — a
+   proof taken at an older base does not prove your test fails against the code you are merging
+   into.
 3. **Mark the story.** Set your story's frontmatter `status: in-progress`. Do **not** regenerate the
    board — that file is fenced.
 4. **Failing-first test, proved at the merge base.** Write the test the Acceptance names. Run it.

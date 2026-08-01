@@ -4,6 +4,43 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.8.1] - 2026-08-01
+
+### Fixed
+
+#### Track Plugin (0.5.1)
+
+**A dispatched implementor's worktree is not guaranteed to sit at the coordinator's `HEAD`**, and
+nothing in either file said so. Observed across one wave of three: all three worktrees were created
+from the commit *before* the coordinator's plan commit, so the story files it had just written and a
+dependency it had just added under the fence were absent from every implementor's tree.
+
+The failure is quiet and it misattributes. An agent reports that a file the brief names does not
+exist, or that a "pre-added" dependency is missing — both read as coordinator error. Two of the
+three recovered by branching from `main`'s tip on their own initiative; the third could not, because
+`story-impl` forbids exactly that: *"never `git switch` to the main branch, never merge"*. It
+improvised a substitute story file from the dispatch brief instead — good judgement under a rule
+that left it no legal move, and work the coordinator then had to reconcile by hand at integration.
+
+- **`story-impl` checks its base before it reads anything.** Step 1 now compares `git rev-parse
+  HEAD` against `git rev-parse main` and names the symptom explicitly: a file the dispatch names but
+  that does not exist is almost never an invented path, it is a stale base. An agent that does
+  substitute something must lead `DEVIATIONS:` with it, because the coordinator has to reconcile it.
+- **Step 2 branches from the tip**: `git switch -c impl/<ID> main`. Naming `main` as the start point
+  creates the branch at the tip *without* checking `main` out, so the prohibition survives intact.
+  An agent already committed on a stale branch merges `main` into it — never rebases — and the
+  blanket "never merge" gains that one narrow exception, stated where the prohibition lives. The
+  step ends with a verification, because `BASE_PROOF:` taken at an older base does not prove the
+  test fails against the code being merged into.
+- **The coordinator names the sha it dispatched from.** `§2 Dispatch` gains it as a required brief
+  field — `git rev-parse HEAD`, read *after* the last commit — which turns a confusing absence into
+  a check the implementor can run. Paired with two habits: commit ledger and setup work *then* read
+  the sha *then* dispatch, and add a story's dependency yourself before dispatch (dependency lists
+  are fenced) and say so. Plus the disposition rule: an implementor that improvised around a missing
+  file has a wrong base, not a scope violation — send it the sha, have it merge and reconcile.
+
+`story-implementer` is unaffected — it works in the main tree and has no worktree base to be stale.
+
 ## [0.8.0] - 2026-07-30
 
 ### Changed

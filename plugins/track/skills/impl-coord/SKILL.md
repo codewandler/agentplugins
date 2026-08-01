@@ -114,7 +114,9 @@ One `story-impl` agent per story, all in a single message so they run concurrent
 - its story ID and file path, and the `design:` path if set;
 - the fence (below), including any project-specific ledgers you found in `AGENTS.md`;
 - the project's gate commands;
-- the instruction to `git switch -c impl/<ID>` before its first commit;
+- **the sha its work must be based on** — `git rev-parse HEAD`, read *after* your last commit and
+  quoted in the brief — plus the instruction to `git switch -c impl/<ID> main` and to verify
+  `git merge-base main HEAD` equals it before starting;
 - the report contract: `VERDICT:` is exactly one of `COMPLETE | PARTIAL | BLOCKED`, and
   `BASE_PROOF:` must show the named test failing at `$(git merge-base main HEAD)`, produced **in its
   own worktree with its own build cache**.
@@ -124,6 +126,26 @@ One `story-impl` agent per story, all in a single message so they run concurrent
 (`Cargo.lock`, `package-lock.json`, …) · dependency lists in manifests · any other shared ledger
 the project names (e.g. a `WHATS-NEW.md`). This is what makes independence possible at all: without
 it every pair of stories collides on the changelog.
+
+**Anything you commit just before dispatching is the thing implementors are most likely not to
+see.** A worktree can be created from an older commit than your `HEAD` — including one that already
+existed before this run — so the plan commit, the story file you just wrote, or the dependency you
+added under the fence may simply be absent from the tree the implementor opens. The symptom is an
+agent reporting that a file you named does not exist, or that a dependency you told it was
+pre-added is missing; both read as *your* error and are not.
+
+Two habits close it, and the cost of both is one command:
+
+- **Commit ledger and setup work first, then read `git rev-parse HEAD`, then dispatch** — and quote
+  that sha in every brief, per the bullet above. A brief that says "based on `<sha>`" turns a
+  confusing absence into a check the implementor can run.
+- **When a story needs a dependency, you add it** (dependency lists are fenced) **before dispatch,
+  and say so** — then the implementor must find it in its own tree. If it reports otherwise, that is
+  a stale base, not a disobedient agent.
+
+If an implementor comes back having improvised around a missing file, do not treat it as a scope
+violation. Send it the sha, have it merge `main` into its branch, and have it reconcile against the
+real file — its work is usually fine and only its base was wrong.
 
 **If worktree isolation is unavailable**, do not fan out into one tree. Run the wave **serially** in
 the main tree, one implementor at a time. Losing parallelism is fine; two agents editing one
