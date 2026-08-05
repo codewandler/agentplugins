@@ -50,10 +50,10 @@ the epic groups in alphabetical order of slug. **Done** is a flat list (not epic
 `/track:board` runs the deterministic generator:
 
 ```
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/gen_board.py [docs-dir]   # default docs-dir: docs
+flux board --root . render
 ```
 
 It rewrites only the marker region in `docs/stories/README.md`, prints a summary, and warns on
-duplicate IDs or unknown statuses. **If `python3` is unavailable** or the script errors, follow
-`scripts/BOARD_SPEC.md` to reproduce the exact same output by hand — the spec is written so the
-result is identical whether a script or an agent produces it.
+duplicate IDs or unknown statuses. Flux is the only mutation path: if it is unavailable, stop and
+report that dependency instead of generating the region by hand. Use `flux board skill` for the
+small agent guide and `flux board schema --output json` for the full contract.

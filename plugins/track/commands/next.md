@@ -11,19 +11,15 @@ Identify and report the next story to work on. If `$ARGUMENTS` is present, treat
 
 ## Steps
 
-1. **Read the stories.** Scan `docs/stories/*.md` (skip `README.md`, `_TEMPLATE.md`) and parse each
-   one's frontmatter.
-
-2. **Pick the top `ready` story.** Among stories with `status: ready`, choose the one with the lowest
-   `priority` integer (ties break on `id`). If `$ARGUMENTS` names an area, consider only stories whose
-   `areas` inline list contains that exact slug. If no ready story matches, say so and report any
-   matching `in-progress` stories plus the size of the matching `backlog`.
+1. **Ask Flux.** Run `flux board next --limit 1 [--area AREA] --output json`. It resolves ready state,
+   dependency satisfaction, integer priority, natural-id ties and workspace namespacing from the
+   authoritative board backend.
 
 3. **Present it.** Show the chosen story's `id`, `title`, `## Goal`, and `## Acceptance` checklist, the
    path to the file, and any linked `design:`.
 
 4. **Offer to start.** Ask whether to begin. If yes:
-   - set the story's `status: in-progress` and run `/track:board`; then
+   - run `flux board start <ID> --output json` and `flux board render --output json`; then
    - either implement it directly following the story's Acceptance, or delegate to the
      `story-implementer` agent for an end-to-end pass (failing-first test → gate → status).
 

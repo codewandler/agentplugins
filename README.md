@@ -69,7 +69,7 @@ as reference content pending conversion.
 plugins/
   track/                          # the spec-driven backlog plugin (installable)
     .claude-plugin/plugin.json
-    commands/  skills/  agents/  scripts/  templates/
+    commands/  skills/  agents/  templates/
   rust-pro/                       # the idiomatic-Rust specialist skill (installable)
     .claude-plugin/plugin.json
     skills/rust-pro/SKILL.md + references/

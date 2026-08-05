@@ -44,7 +44,8 @@ real plugin path when the command runs). If for any reason it didn't resolve, lo
    `<!-- BEGIN track:agents -->` / `<!-- END track:agents -->` — **if those markers already exist in
    AGENTS.md, replace the region between them** rather than appending a duplicate.
 
-6. **Seed the board.** Run `/track:board $1` so the board's generated region is populated (it will show
+6. **Register and seed the board.** Run `flux board init --scaffold --output json`, then
+   `flux board render --output json` so the generated region is populated (it will show
    empty sections until stories exist).
 
 7. **Report.** List exactly what was created vs. skipped, and tell the user the next step is

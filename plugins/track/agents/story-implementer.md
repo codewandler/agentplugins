@@ -22,9 +22,9 @@ You are given a story ID (e.g. `D-12`) or a story file path. If given neither, o
    checklist — Acceptance defines "done". If the frontmatter has a `design:`, read that document.
 2. **Orient in the code.** `git status --short --branch` first; treat uncommitted changes as
    user-owned. Search and read the relevant files before changing anything — do not rely on memory.
-3. **Mark it in progress.** Set the story's frontmatter `status: in-progress` and regenerate the
-   board with `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/gen_board.py docs` (if `python3` is unavailable,
-   follow `${CLAUDE_PLUGIN_ROOT}/scripts/BOARD_SPEC.md` to regenerate it by hand).
+3. **Mark it in progress.** Run `flux board start <ID> --output json`, then
+   `flux board render --output json`. Flux is the only board mutation path; do not fall back to
+   Python or hand-edit the generated region.
 4. **Failing-first test.** For any behavioral change, write the test the Acceptance names, run it,
    and confirm it fails for the right reason before writing the implementation.
 5. **Implement.** Make the change. Match the surrounding code's conventions. Keep the change scoped to

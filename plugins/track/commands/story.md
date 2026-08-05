@@ -28,19 +28,21 @@ Create a new story. `$ARGUMENTS` (if given) is the story title.
    - **areas** — optional query-only subsystem tags such as `flux-lang`, `flux-flow`, `website`, `cli`,
      or `plugins`. Write them as an inline list: `areas: [flux-lang, flux-flow]`.
 
-4. **Allocate the ID.** `<PREFIX>-<next number for that prefix>`. Build a slug from the title
-   (lowercase, words joined by `-`, punctuation dropped).
+4. **Create through Flux.** Use the stable mutation path, repeating `--area` as needed:
 
-5. **Write the file.** `docs/stories/<ID>-<slug>.md` from `templates/story.md` (resolve the templates
-   dir as in `/track:init`), substituting `{{ID}}`, `{{TITLE}}`, `{{PILLAR}}` and setting `status`
-   (and `priority`/`epic`/`areas` if provided). Leave the body sections as prompts for the user to
-   fill, or draft a first-pass `## Goal`/`## Acceptance` from the title if the user gave enough
-   detail.
+   ```bash
+   flux board create --kind story --id <ID> --title "<TITLE>" --pillar "<PILLAR>" \
+     --status <backlog|ready> [--priority N] [--epic SLUG] [--area AREA] --output json
+   ```
 
-6. **Sync the board.** Run `/track:board`.
+   Omit `--id` only when the repository uses Flux's default `C-N` allocator. Flux uses create-new
+   semantics and never clobbers a competing allocation. Draft the generated `## Goal` and
+   `## Acceptance` only after creation when the user supplied enough detail.
 
-7. **Report** the new story path and ID, and remind the user to flesh out `## Goal` and `## Acceptance`.
+5. **Sync the board.** Run `flux board render --output json`.
+
+6. **Report** the new story path and ID, and remind the user to flesh out `## Goal` and `## Acceptance`.
 
 ## Guardrails
 - Never reuse or renumber an existing ID. If the computed filename already exists, bump the number.
-- Don't leave raw `{{…}}` placeholders in the created file.
+- Flux is the only creation/render mutation path; do not copy templates or hand-edit the marker.

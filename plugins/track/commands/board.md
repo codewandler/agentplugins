@@ -1,22 +1,21 @@
 ---
-description: Regenerate the status board from story frontmatter, rewriting only the generated region.
-argument-hint: "[docs-dir]"
+description: Regenerate the status board through Flux, rewriting only the generated region.
+argument-hint: "[repo-root]"
 ---
 
 # /track:board
 
-Regenerate `<docs>/stories/README.md`'s generated region from story frontmatter. `$1` is the docs
-directory (default `docs`).
+Regenerate `docs/stories/README.md`'s generated region from story frontmatter. `$1` is the optional
+repository root (default `.`).
 
-## Run the generator
+## Run Flux's native Track backend
 
 ```bash
-python3 ${CLAUDE_PLUGIN_ROOT}/scripts/gen_board.py ${1:-docs}
+flux board --root "${1:-.}" render
 ```
 
-(The `${CLAUDE_PLUGIN_ROOT}` token is substituted to the real plugin path before this runs. If the
-path somehow didn't resolve, find the script with
-`find ~/.claude/plugins -path '*/track/scripts/gen_board.py' 2>/dev/null | head -1` and run that.)
+`flux board` is the supported renderer and automation API. Do not invoke a Python fallback or
+recreate the renderer in prompt code.
 
 Report the generator's summary line (and any warnings) to the user. The script:
 - rewrites only the region between `<!-- BEGIN track:board -->` and `<!-- END track:board -->`,
@@ -26,12 +25,12 @@ Report the generator's summary line (and any warnings) to the user. The script:
 - parses optional `areas` metadata for query consumers but does not render it on board rows;
 - is idempotent (a second run makes no change).
 
-## If python3 is unavailable
+## If Flux is unavailable
 
-Regenerate the board **by hand** following the exact algorithm in
-`${CLAUDE_PLUGIN_ROOT}/scripts/BOARD_SPEC.md`. The spec produces byte-identical output, so the result
-is the same whether the script or you generate it. Read every story's frontmatter, build the sections
-as specified, and splice them between the two markers — touch nothing outside them.
+Stop with a clear installation error. The plugin deliberately has no second mutation path: a manual
+or private-script renderer would drift from the same revision/idempotency contract used by Codex,
+Claude and fleet automation. `flux board skill` is the concise operating guide and
+`flux board schema --output json` is the complete machine contract.
 
 ## If the markers are missing
 

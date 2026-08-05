@@ -58,7 +58,7 @@ reuse it with the same two commands. For team-wide auto-install, add to a repo's
 | `/track:init [docs-dir]` | Scaffold the framework into the current repo (idempotent; never clobbers). |
 | `/track:story [title]` | Create a story — allocates the next ID, writes the file, syncs the board. |
 | `/track:epic [name]` | Start an epic — a design doc + roadmap narrative + optional child stories. |
-| `/track:board [docs-dir]` | Regenerate the board from story frontmatter. |
+| `/track:board [repo-root]` | Regenerate the board from story frontmatter through Flux. |
 | `/track:next [area]` | Report the top `ready` story, optionally filtered by `areas`. |
 | `/track:done <ID>` | Close a story — set `status: done`, add a CHANGELOG entry, sync the board. |
 | `/track:design <ID> [slug]` | Create/link a design doc for a story. |
@@ -96,12 +96,13 @@ rg -l '^areas: .*flux-lang' docs/stories
 
 ## Board generation
 
-`/track:board` runs `scripts/gen_board.py` (Python 3, **standard library only** — no install step). It
-reads every story's frontmatter and rewrites only the region between `<!-- BEGIN track:board -->` and
+`/track:board` delegates to Flux's native Track backend (`flux board render`). It reads every story's
+frontmatter and rewrites only the region between `<!-- BEGIN track:board -->` and
 `<!-- END track:board -->` in `docs/stories/README.md`, grouping by status (Now / Next / Blocked /
-Backlog / Done) and by `epic`. If `python3` isn't available, the command regenerates the board by
-following `scripts/BOARD_SPEC.md`, which specifies the exact same output. The hand-written parts of the
-board (intro, status summary, epic narratives) are always preserved.
+Backlog / Done) and by `epic`. There is no Python or prompt-maintained fallback; the hand-written
+parts of the board (intro, status summary, epic narratives) are always preserved. Agents can load
+the version-matched guide with `flux board skill` and discover the JSON API with
+`flux board schema --output json`.
 
 ## License
 

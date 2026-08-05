@@ -16,6 +16,13 @@ where every unit of work is a markdown **story** with frontmatter, and a **statu
 generated deterministically from those stories. The model proven in the `flux` project, packaged so
 any agent can self-orient and keep the backlog honest.
 
+## Load the installed CLI contract
+
+At the beginning of board automation, run `flux board skill`. That compact guide is rendered by the
+installed Flux version and therefore takes precedence over copied command examples here. Use
+`flux board schema --output json` for the complete machine surface and JSON mode for mutations. If
+Flux is unavailable, stop with a clear dependency error; never invent a private mutation fallback.
+
 ## The four layers
 
 | Layer | Lives in | What it is |

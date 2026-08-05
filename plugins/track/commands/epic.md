@@ -15,11 +15,10 @@ stories; the board groups those stories automatically.
    joined) — this slug is the join key: it must match the design doc basename `docs/designs/<slug>.md`
    and the `epic:` field on member stories.
 
-2. **Create the design doc.** Write `docs/designs/<slug>.md` from `${CLAUDE_PLUGIN_ROOT}/templates/design.md`
-   (locate templates as in `/track:init`). Substitute `{{TITLE}}` with the epic name and `{{PILLAR}}`;
-   set `{{STORY_LINKS}}` to a placeholder (you'll fill it as stories are created). Fill in `## Why` and
-   `## Approach` with the user's description of the epic. The H1 of this file becomes the epic's title
-   on the board, so make it read well (a leading `Design:` is stripped automatically).
+2. **Create the design doc.** Run
+   `flux board create --kind epic --id <EPIC-ID> --title "<NAME>" --output json`, then fill its
+   `## Why` and `## Approach`. Flux refuses to overwrite an existing epic design. The H1 becomes the
+   epic title on the board.
 
 3. **Add a roadmap narrative.** If `docs/roadmap.md` exists, add (or update) a `### <Epic title>`
    subsection under its `## Epics` heading: a short paragraph on why the epic exists and what "done"
@@ -30,7 +29,7 @@ stories; the board groups those stories automatically.
    run the `/track:story` flow and set `epic: <slug>` in the frontmatter. Then update the design doc's
    `## Stories` / `{{STORY_LINKS}}` to link them.
 
-5. **Sync the board.** Run `/track:board` — member stories now appear grouped under the epic title in
+5. **Sync the board.** Run `flux board render --output json` — member stories now appear grouped under the epic title in
    the Next/Backlog sections.
 
 6. **Report** the design doc path, the slug (so the user can tag more stories with `epic: <slug>`), and

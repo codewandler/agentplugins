@@ -4,6 +4,19 @@ All notable changes to codewandler/agentplugins are documented in this file.
 
 ## [Unreleased]
 
+## [0.8.2] - 2026-08-05
+
+### Changed
+
+#### Track Plugin (0.5.2)
+
+- Board creation, transitions, completion, designs, next-item selection and marker rendering now use
+  the native `flux board` CLI. The duplicate Python generator and its prompt-maintained fallback
+  specification were removed; Claude and Codex can load the installed contract with
+  `flux board skill` and discover automation fields with `flux board schema --output json`. Track
+  now fails clearly when the installed Flux predates that command instead of silently taking a
+  second mutation path.
+
 ## [0.8.1] - 2026-08-01
 
 ### Fixed

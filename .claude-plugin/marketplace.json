@@ -5,7 +5,7 @@
     "url": "https://github.com/codewandler"
   },
   "description": "Reusable Claude Code plugins from codewandler.",
-  "version": "0.8.1",
+  "version": "0.8.2",
   "plugins": [
     {
       "name": "flux-agent",
@@ -29,7 +29,7 @@
       "name": "track",
       "source": "./plugins/track",
       "description": "Spec-driven backlog: vision -> roadmap -> stories -> designs as in-repo markdown, with a deterministic status board generated from story frontmatter. Slash commands for the full story lifecycle, a self-orienting skill so any agent picks up the next ready story, and an impl-coord skill that works the backlog autonomously via parallel worktree implementors \u2014 artifact-based failing-first proofs, independent review, serial gated integration, a specified degraded mode when implementors cannot be spawned, and reversible-half release cutting.",
-      "version": "0.5.1",
+      "version": "0.5.2",
       "license": "MIT",
       "category": "project-management",
       "keywords": [

@@ -224,7 +224,7 @@ One story at a time. Never merge two before gating.
 6. **Ledger commit** for that story: `status: done`, Acceptance ticks, a `CHANGELOG.md` entry under
    `[Unreleased]`, any other project ledger (e.g. a plain-language what's-new entry if the change is
    user-visible), and regenerate the board with
-   `python3 ${CLAUDE_PLUGIN_ROOT}/scripts/gen_board.py docs` — never hand-edit the region between
+   `flux board render --output json` — never hand-edit the region between
    `<!-- BEGIN track:board -->` and `<!-- END track:board -->`. Commit it following the repo's
    commit conventions (check `git log`) with a real body.
 7. **Reclaim disk as you integrate — part of the loop, not an afterthought.** Once a story is in,
